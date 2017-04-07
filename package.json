@@ -1,0 +1,23 @@
+{
+  "name": "fenomen",
+  "version": "1.0.0",
+  "description": "shop",
+  "main": "index.js",
+  "dependencies": {
+    "bower": "^1.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yurastich/fenomen.git"
+  },
+  "author": "Yurii Karpenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yurastich/fenomen/issues"
+  },
+  "homepage": "https://github.com/yurastich/fenomen#readme"
+}
