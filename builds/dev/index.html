@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="fen">
+<head>
+  <meta charset="UTF-8">
+  <title>Fenomen</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div class="wrap">
+  <div class="content">
+  <ng-include src="'app/header/header.html'"></ng-include>
+    <div class="angular-page" ng-view>
+    </div>
+  </div>
+  <ng-include src="'app/footer/footer.html'"></ng-include>
+</div>
+
+
+<!--The app-->
+<script src="libs.js"></script>
+
+<script>
+  // Initialize the Firebase SDK
+  var config = {
+    apiKey: "AIzaSyAB-iQDdPv1Wte-LnieplX0HQjaSm9vVYE",
+    authDomain: "fenomen-75cfc.firebaseapp.com",
+    databaseURL: "https://fenomen-75cfc.firebaseio.com",
+    projectId: "fenomen-75cfc",
+    storageBucket: "fenomen-75cfc.appspot.com",
+    messagingSenderId: "231623679199"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script src="app.js"></script>
+<!--END The app-->
+
+
+<!--&lt;!&ndash;The jquery&ndash;&gt;-->
+<!--<script src="js/global.js"></script>-->
+<!--&lt;!&ndash;END The jquery&ndash;&gt;-->
+
+
+</body>
+</html>

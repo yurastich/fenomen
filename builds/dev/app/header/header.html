@@ -1,0 +1,146 @@
+<div class="b-alert-container">
+  <div class="b-alert" ng-class="{'m-alert-close':close==$index}" ng-repeat="alert in alerts">
+    <button class="b-close m-close-sm" ng-click="closeAlert($index)"></button>
+    <span class="e-alert-text">
+      {{alert.msg}}
+    </span>
+  </div>
+</div>
+
+
+<header class="b-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <nav class="b-nav">
+          <ul class="e-nav-list">
+            <li class="e-nav-item">
+              <div class="t">
+                <div class="c">
+                  <a href="home" class="b-logo">
+                    <span class="e-logo-text">fenomen</span>
+                  </a>
+                </div>
+              </div>
+            </li>
+            <li class="e-nav-item">
+              <a href="home" class="e-nav-link" ng-class="{'active':Page=='home'}">
+              <span class="t">
+                    <span class="c">
+                        <span class="e-nav-link-text">Главная</span>
+                    </span>
+              </span>
+              </a>
+            </li>
+            <li class="e-nav-item">
+              <a href="products-list" class="e-nav-link" ng-class="{'active':Page=='products-list'}">
+              <span class="t">
+                    <span class="c">
+                        <span class="e-nav-link-text">Товары</span>
+                    </span>
+              </span>
+              </a>
+              <div class="b-nav-sub-menu-container">
+                <div class="b-scroll" ng-scrollbars>
+                  <ul class="b-sub-menu">
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Куртки</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Джинсы</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Штаны</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Ремни</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Кофты</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Свитера</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Шапки</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Футболки</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Поло</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Майки</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Шорты</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Рубашки</a>
+                    </li>
+                    <li class="e-sub-menu-item">
+                      <a href="" class="e-sub-menu-link">Носки</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li class="e-nav-item">
+              <a href="#/users" class="e-nav-link" ng-class="{'active':Page=='users'}">
+              <span class="t">
+                    <span class="c">
+                        <span class="e-nav-link-text">Users</span>
+                    </span>
+              </span>
+              </a>
+            </li>
+            <li class="e-nav-item">
+              <a href="contacts" class="e-nav-link" ng-class="{'active':Page=='contacts'}">
+              <span class="t">
+                    <span class="c">
+                        <span class="e-nav-link-text">Контакты</span>
+                    </span>
+              </span>
+              </a>
+            </li>
+            <li class="e-nav-item">
+              <a href="#" class="e-nav-link">
+              <span class="t">
+                    <span class="c">
+                        <span class="e-nav-link-text"><span class="e-nav-link-icon"><i class="fa fa-shopping-basket"
+                                                                                       aria-hidden="true"></i></span>Корзина</span>
+                    </span>
+              </span>
+              </a>
+            </li>
+            <li class="e-nav-item" data-button="1">
+              <div class="t">
+                <div class="c">
+                  <div class="b-header-auth">
+                    <div class="e-header-auth m-header-auth-sing-in">
+                      <div class="t">
+                        <div class="c">
+                          <span class="b-icon"><i class="fa fa-sign-in" aria-hidden="true"></i></span>
+                          <span class="e-header-auth-text">Вход / Регистрация</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="e-header-auth m-header-auth-sing-out">
+                      <div class="t">
+                        <div class="c">
+                          <span class="b-icon"><i class="fa fa-sign-out" aria-hidden="true"></i></span>
+                          <span class="e-header-auth-text">Петр Епифанцев</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
