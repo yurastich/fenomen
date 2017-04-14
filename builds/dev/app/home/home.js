@@ -37,13 +37,15 @@
   }
 
   // @ngInject
-  function HomeConfig ($routeProvider) {
-    $routeProvider
-      .when("/", {
+  function HomeConfig ($stateProvider) {
+    $stateProvider
+      .state("home", {
+        url: "/",
         templateUrl: "app/home/home.html",
-        controller: "HomeCtrl"
-      })
-      .otherwise({ redirectTo: "/" })
+        controller: "HomeCtrl",
+        authenticate: false
+      });
+    // $locationProvider.hashPrefix('');
   }
 
 })();

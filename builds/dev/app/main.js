@@ -4,7 +4,7 @@
 
   angular
     .module("fen", [
-      "ngRoute",
+      "ui.router",
       "ui.bootstrap",
       "ngScrollbars",
       "fen.home",
@@ -13,29 +13,21 @@
       "fen.header",
       "fen.users",
       "firebase",
-      "fen.dbc"
+      "fen.database",
+      "fen.registration"
     ])
-    // .constant("FURL", {
-    //   apiKey: "AIzaSyAB-iQDdPv1Wte-LnieplX0HQjaSm9vVYE",
-    //   authDomain: "fenomen-75cfc.firebaseapp.com",
-    //   databaseURL: "https://fenomen-75cfc.firebaseio.com",
-    //   projectId: "fenomen-75cfc",
-    //   storageBucket: "fenomen-75cfc.appspot.com",
-    //   messagingSenderId: "231623679199"
-    // })
     .controller("MainCtrl", MainController)
     .controller("SubCtrl", SubController)
     .run(MainRun)
     .config(MainScroll)
+    .config(MainConfig)
 
 
   // @ngInject
   function SubController() {
     var s = this;
 
-    s.sub = {
-      hello: "Привет мир qwe"
-    }
+
   }
 
 
@@ -44,18 +36,50 @@
 
     var s = this;
 
-    s.main = {
-      hello: "Привет мир"
-    };
-    s.valuables = ["We are the best", "We are awesome"];
+    $("input").each(function () {
+      var valNow = $(this).val(),
+        par = $(this).closest(".b-input-container");
+      if (valNow == "") {
+        par.removeClass("m-full");
+      } else {
+        par.addClass("m-full");
+      }
+    });
 
+    $("input").blur(function () {
+      var valNow = $(this).val(),
+        par = $(this).closest(".b-input-container");
+      if (valNow == "") {
+        par.removeClass("m-full");
+      } else {
+        par.addClass("m-full");
+      }
+
+    });
 
   }
 
   // @ngInject
-  function MainRun($rootScope) {
+  function MainRun($rootScope, $state, $stateParams, fire) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
 
-
+    $rootScope.$on('$stateChangeStart',
+      function (event, toState, toParams, fromStat, fromParams) {
+        console.log(fire.isLogin());
+        // console.log(toState.authenticate);
+        if(toState.authenticate && !fire.isLogin()){
+          $state.transitionTo("singin")
+          event.preventDefault();
+        }else if (!toState.authenticate && fire.isLogin()) {
+          $rootScope.isLogin = true;
+          //$state.transitionTo('home');
+          //event.preventDefault();
+        } else if (!toState.authenticate && !fire.isLogin()) {
+          //$state.transitionTo('home');
+          //event.preventDefault();
+        }
+      });
   }
 
   // @ngInject
@@ -67,6 +91,12 @@
       },
       axis: 'y' // enable 2 axis scrollbars by default
     };
+  }
+
+  // @ngInject
+  function MainConfig($urlRouterProvider, $locationProvider) {
+    $urlRouterProvider.otherwise("/");
+    $locationProvider.hashPrefix('');
   }
 
 })();

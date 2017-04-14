@@ -3,9 +3,7 @@
     "use strict";
 
     angular
-        .module("fen.contacts", [
-          "ngRoute"
-        ])
+        .module("fen.contacts", [])
         .controller("ContactsCtrl", ContactsController)
         .config(ContactsConfig)
 
@@ -35,16 +33,14 @@
       }
 
        // @ngInject
-      function ContactsConfig($routeProvider, $locationProvider) {
-        $routeProvider
-          .when("/contacts", {
+      function ContactsConfig($stateProvider) {
+        $stateProvider
+          .state("contacts", {
+            url: "/contacts",
             templateUrl: "app/contacts/contacts.html",
-            controller: "ContactsCtrl"
-          })
-          .otherwise({ redirectTo: "/" });
-
-        // $locationProvider.html5Mode(false).hashPrefix('');
-
+            controller: "ContactsCtrl",
+            authenticate: false
+          });
       }
 
 })();

@@ -3,9 +3,7 @@
   "use strict";
 
   angular
-    .module("fen.productsList", [
-      "ngRoute"
-    ])
+    .module("fen.productsList", [])
     .controller("ProductsListCtrl", ProductsListController)
     .config(ProductsListConfig)
 
@@ -318,17 +316,15 @@
   }
 
   // @ngInject
-  function ProductsListConfig($routeProvider, $locationProvider) {
-    $routeProvider
-      .when("/products-list", {
+  function ProductsListConfig($stateProvider) {
+    $stateProvider
+      .state("products-list", {
+        url: "/products-list",
         templateUrl: "app/products-list/products-list.html",
         controller: "ProductsListCtrl",
-        controllerAs: "plc"
+        controllerAs: "plc",
+        authenticate: false
       })
-      .otherwise({ redirectTo: "/" });
-
-    // $locationProvider.html5Mode(false).hashPrefix('');
-
   }
 
 })();

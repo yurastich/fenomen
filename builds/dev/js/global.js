@@ -6,32 +6,8 @@ function include(url) {
 
 include("/js/popup.js");
 
+
 $(document).ready(function () {
-
-    (function($){
-        $(window).on("load",function(){
-
-
-        });
-    })(jQuery);
-
-
-    $(window).on("load", function () {
-        $(".b-global-container").mCustomScrollbar({
-            keyboard: {
-                enable: true
-            }
-        });
-        $(".b-scroll").mCustomScrollbar();
-    });
-
-    var swiper = new Swiper('.b-first', {
-        parallax: true,
-        speed: 3000,
-        effect: "fade",
-        loop: true,
-        autoplay: 1
-    });
 
     var galleryTop = new Swiper('.b-photo-list-container', {
         nextButton: '.js-arrow-right',

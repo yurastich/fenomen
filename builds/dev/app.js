@@ -3,11 +3,12 @@
   "use strict";
 
   MainController.$inject = ["$rootScope", "$scope"];
-  MainRun.$inject = ["$rootScope"];
+  MainRun.$inject = ["$rootScope", "$state", "$stateParams", "fire"];
   MainScroll.$inject = ["ScrollBarsProvider"];
+  MainConfig.$inject = ["$urlRouterProvider", "$locationProvider"];
   angular
     .module("fen", [
-      "ngRoute",
+      "ui.router",
       "ui.bootstrap",
       "ngScrollbars",
       "fen.home",
@@ -16,29 +17,21 @@
       "fen.header",
       "fen.users",
       "firebase",
-      "fen.dbc"
+      "fen.database",
+      "fen.registration"
     ])
-    // .constant("FURL", {
-    //   apiKey: "AIzaSyAB-iQDdPv1Wte-LnieplX0HQjaSm9vVYE",
-    //   authDomain: "fenomen-75cfc.firebaseapp.com",
-    //   databaseURL: "https://fenomen-75cfc.firebaseio.com",
-    //   projectId: "fenomen-75cfc",
-    //   storageBucket: "fenomen-75cfc.appspot.com",
-    //   messagingSenderId: "231623679199"
-    // })
     .controller("MainCtrl", MainController)
     .controller("SubCtrl", SubController)
     .run(MainRun)
     .config(MainScroll)
+    .config(MainConfig)
 
 
   // @ngInject
   function SubController() {
     var s = this;
 
-    s.sub = {
-      hello: "Привет мир qwe"
-    }
+
   }
 
 
@@ -47,18 +40,50 @@
 
     var s = this;
 
-    s.main = {
-      hello: "Привет мир"
-    };
-    s.valuables = ["We are the best", "We are awesome"];
+    $("input").each(function () {
+      var valNow = $(this).val(),
+        par = $(this).closest(".b-input-container");
+      if (valNow == "") {
+        par.removeClass("m-full");
+      } else {
+        par.addClass("m-full");
+      }
+    });
 
+    $("input").blur(function () {
+      var valNow = $(this).val(),
+        par = $(this).closest(".b-input-container");
+      if (valNow == "") {
+        par.removeClass("m-full");
+      } else {
+        par.addClass("m-full");
+      }
+
+    });
 
   }
 
   // @ngInject
-  function MainRun($rootScope) {
+  function MainRun($rootScope, $state, $stateParams, fire) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
 
-
+    $rootScope.$on('$stateChangeStart',
+      function (event, toState, toParams, fromStat, fromParams) {
+        console.log(fire.isLogin());
+        // console.log(toState.authenticate);
+        if(toState.authenticate && !fire.isLogin()){
+          $state.transitionTo("singin")
+          event.preventDefault();
+        }else if (!toState.authenticate && fire.isLogin()) {
+          $rootScope.isLogin = true;
+          //$state.transitionTo('home');
+          //event.preventDefault();
+        } else if (!toState.authenticate && !fire.isLogin()) {
+          //$state.transitionTo('home');
+          //event.preventDefault();
+        }
+      });
   }
 
   // @ngInject
@@ -72,17 +97,21 @@
     };
   }
 
+  // @ngInject
+  function MainConfig($urlRouterProvider, $locationProvider) {
+    $urlRouterProvider.otherwise("/");
+    $locationProvider.hashPrefix('');
+  }
+
 })();
 ;(function(){
 
     "use strict";
 
       ContactsController.$inject = ["$scope"];
-      ContactsConfig.$inject = ["$routeProvider", "$locationProvider"];
+      ContactsConfig.$inject = ["$stateProvider"];
     angular
-        .module("fen.contacts", [
-          "ngRoute"
-        ])
+        .module("fen.contacts", [])
         .controller("ContactsCtrl", ContactsController)
         .config(ContactsConfig)
 
@@ -112,57 +141,64 @@
       }
 
        // @ngInject
-      function ContactsConfig($routeProvider, $locationProvider) {
-        $routeProvider
-          .when("/contacts", {
+      function ContactsConfig($stateProvider) {
+        $stateProvider
+          .state("contacts", {
+            url: "/contacts",
             templateUrl: "app/contacts/contacts.html",
-            controller: "ContactsCtrl"
-          })
-          .otherwise({ redirectTo: "/" });
-
-        // $locationProvider.html5Mode(false).hashPrefix('');
-
+            controller: "ContactsCtrl",
+            authenticate: false
+          });
       }
 
 })();
-;(function(){
+;(function () {
 
-    "use strict";
+  "use strict";
 
-      dbcFactory.$inject = ["$scope"];
-      DbcController.$inject = ["$scope"];
-    angular
-        .module("fen.dbc", [
-          "firebase",
-        ])
-        .factory("dbc", dbcFactory)
-        .controller("DbcCtrl", DbcController)
+  fireFactory.$inject = ["$firebaseAuth"];
+  angular
+    .module("fen.database", [
+      "firebase"
+    ])
+    .factory("fire", fireFactory)
+
+  // @ngInject
+  function fireFactory($firebaseAuth) {
+    var o = {},
+      users = null,
+      ref = firebase.database().ref(),
+      refUser = ref.child("users"),
+      auth = firebase.auth();
+
+    o.getRef = function () {
+      return ref;
+    };
+
+    o.get$Auth = function () {
+      return auth;
+    };
+
+    o.getAuth = function () {
+      return ref.getAuth();
+    };
+
+    o.isLogin = function () {
+      auth.onAuthStateChanged(function (user) {
+        if (user) {
+          return true
+        } else {
+          return false
+        }
+      });
+    };
 
 
-      // @ngInject
-      function dbcFactory ($scope) {
-        // var o = {};
-        // var ref = firebase.initializeApp(FURL);
-        // o.getRef = function () {
-        //
-        //   return ref;
-        // };
-        //
-        // return o;
-      }
-      // @ngInject
-      function DbcController ($scope) {
-        // var ref = firebase.database().ref();
-        // // download the data into a local object
-        // $scope.data = $firebaseObject(ref);
-        // var syncObject = $firebaseObject(ref);
-        // // synchronize the object with a three-way data binding
-        // // click on `index.html` above to see it used in the DOM!
-        // syncObject.$bindTo($scope, "data");
-        // console.log($scope.data)
-      }
+    return o;
+  }
 
 })();
+
 angular
     .module("fen.header", [])
     .controller("headerCtrl", headerController)
@@ -183,7 +219,7 @@ angular
     "use strict";
 
   HomeController.$inject = ["$rootScope"];
-  HomeConfig.$inject = ["$routeProvider"];
+  HomeConfig.$inject = ["$stateProvider"];
   angular
     .module("fen.home", [])
     .controller("HomeCtrl", HomeController)
@@ -219,13 +255,15 @@ angular
   }
 
   // @ngInject
-  function HomeConfig ($routeProvider) {
-    $routeProvider
-      .when("/", {
+  function HomeConfig ($stateProvider) {
+    $stateProvider
+      .state("home", {
+        url: "/",
         templateUrl: "app/home/home.html",
-        controller: "HomeCtrl"
-      })
-      .otherwise({ redirectTo: "/" })
+        controller: "HomeCtrl",
+        authenticate: false
+      });
+    // $locationProvider.hashPrefix('');
   }
 
 })();
@@ -236,11 +274,9 @@ angular
   "use strict";
 
   ProductsListController.$inject = ["$rootScope"];
-  ProductsListConfig.$inject = ["$routeProvider", "$locationProvider"];
+  ProductsListConfig.$inject = ["$stateProvider"];
   angular
-    .module("fen.productsList", [
-      "ngRoute"
-    ])
+    .module("fen.productsList", [])
     .controller("ProductsListCtrl", ProductsListController)
     .config(ProductsListConfig)
 
@@ -553,51 +589,184 @@ angular
   }
 
   // @ngInject
-  function ProductsListConfig($routeProvider, $locationProvider) {
-    $routeProvider
-      .when("/products-list", {
+  function ProductsListConfig($stateProvider) {
+    $stateProvider
+      .state("products-list", {
+        url: "/products-list",
         templateUrl: "app/products-list/products-list.html",
         controller: "ProductsListCtrl",
-        controllerAs: "plc"
+        controllerAs: "plc",
+        authenticate: false
       })
-      .otherwise({ redirectTo: "/" });
-
-    // $locationProvider.html5Mode(false).hashPrefix('');
-
   }
 
 })();
 
-;(function(){
+;(function () {
 
-    "use strict";
+  "use strict";
 
-    dbcConfig.$inject = ["$routeProvider", "$locationProvider"];
-    angular
-      .module("fen.users", [
-        "firebase"
-      ])
-      .config(dbcConfig)
+  RegistrationController.$inject = ["registration", "$rootScope"];
+  RegistrationFactory.$inject = ["fire", "$rootScope", "users"];
+  RegistrationConfig.$inject = ["$stateProvider"];
+  angular
+    .module("fen.registration", [])
+    .controller("RegistrationCtrl", RegistrationController)
+    .factory("registration", RegistrationFactory)
+    .config(RegistrationConfig)
 
-    // @ngInject
-    function dbcConfig ($routeProvider, $locationProvider) {
-        $routeProvider
-          .when("/users", {
-              templateUrl: "app/users/users.html",
-              controller: "UsersCtrl",
-              controllerAs: "uc"
-          })
-          .otherwise({ redirectTo: "/" });
-      $locationProvider.html5Mode(false).hashPrefix('');
 
-    }
+  // @ngInject
+  function RegistrationController(registration, $rootScope) {
+    var s = this;
+
+    $rootScope.Page = "registration";
+
+    s.singinUser = {
+      email: null,
+      password: null
+    };
+
+    s.singin = function () {
+      registration.singin(s.singinUser)
+    };
+
+    s.signupUser = {
+      email: null,
+      password: null,
+      name: null,
+      surname: null
+    };
+
+    s.signup = function () {
+      registration.singup(s.singupUser);
+    };
+
+
+  }
+
+  // @ngInject
+  function RegistrationFactory(fire, $rootScope, users) {
+    var o = {};
+    // var auth = firebase.auth();
+    var auth = fire.get$Auth();
+
+    $rootScope.logout = function () {
+      auth.signOut();
+    };
+
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // User is signed in.
+        console.log("singing");
+        console.log("All info: ", user);
+        console.log("Detail: ", user.providerData[0]);
+        users.getUser(user.uid).then(function (_user) {
+          $rootScope.currentUser = {
+            loggedIn: true,
+            fullname: _user.name + " "+ _user.surname
+          }
+        });
+
+      }else{
+        console.log("sing out");
+        $rootScope.currentUser = {
+          loggedIn: false,
+          fullname: null
+        }
+      }
+    });
+
+    o.singin = function (_user) {
+      console.log(_user)
+      return auth.signInWithEmailAndPassword(_user.email, _user.password)
+    };
+
+    o.singup = function (_user) {
+      return auth.createUserWithEmailAndPassword(_user.email, _user.password)
+        .then(function (userData) {
+          var userRef = fire.getRef().child("users").child(userData.uid);
+          userRef.set({
+            name: _user.name,
+            surname: _user.surname,
+            registered: firebase.database.ServerValue.TIMESTAMP,
+            last_visit: firebase.database.ServerValue.TIMESTAMP
+          });
+
+          // return auth.signInWithEmailAndPassword(_user.email, _user.password)
+        });
+    };
+
+    return o;
+  }
+
+
+  // @ngInject
+  function RegistrationConfig($stateProvider) {
+
+    $stateProvider
+      .state("singin", {
+        url: "/singin",
+        templateUrl: "app/registration/singin.html",
+        controller: "RegistrationCtrl",
+        controllerAs: "rc",
+        authenticate: false
+      })
+      .state("singup", {
+        url: "/singup",
+        templateUrl: "app/registration/singup.html",
+        controller: "RegistrationCtrl",
+        controllerAs: "rc",
+        authenticate: false
+      })
+
+  }
+
+})();
+;(function () {
+
+  "use strict";
+
+  dbcConfig.$inject = ["$stateProvider"];
+  angular
+    .module("fen.users", [
+      "firebase"
+    ])
+    .config(dbcConfig)
+
+  // @ngInject
+  function dbcConfig($stateProvider) {
+    $stateProvider
+      .state("users", {
+        url: "/users",
+        templateUrl: "app/users/users.html",
+        controller: "UsersCtrl",
+        controllerAs: "us",
+        authenticate: false
+      })
+      .state("users.page1", {
+        url: "/page1",
+        templateUrl: "app/users/pages/users.page1.html",
+        authenticate: true
+      })
+      .state("users.page2", {
+        url: "/page2",
+        templateUrl: "app/users/pages/users.page2.html",
+        authenticate: true
+      })
+      .state("users.page3", {
+        url: "/page3",
+        templateUrl: "app/users/pages/users.page3.html",
+        authenticate: true
+      })
+  }
 
 })();
 ;(function(){
 
   "use strict";
 
-  UsersControllerFunction.$inject = ["$rootScope", "firebase"];
+  UsersControllerFunction.$inject = ["$scope", "users", "$stateParams"];
   angular
     .module("fen.users")
     .controller("UsersCtrl", UsersControllerFunction)
@@ -605,24 +774,69 @@ angular
 
 
   // @ngInject
-  function UsersControllerFunction ($rootScope, firebase) {
-    // $rootScope.Page = "users";
-    // var s = this;
-    //
-    // s.users = [];
-    //
-    // users.getUsers().then(function (_data) {
-    //   s.users = _data
-    // })
-    var ref = firebase.database().ref();
-    // download the data into a local object
-    $rootScope.data = $firebaseObject(ref);
-    var syncObject = $firebaseObject(ref);
-    // synchronize the object with a three-way data binding
-    // click on `index.html` above to see it used in the DOM!
-    syncObject.$bindTo($rootScope, "data");
-    console.log($rootScope.data);
-    console.log("lalala");
+  function UsersControllerFunction ($scope, users, $stateParams) {
+
+    var s = this;
+
+    s.users = [];
+
+    console.log("$stateParams.authenticate ",$stateParams.authenticate)
+
+    users.getUsers().then(function (_data) {
+      s.users = _data;
+    });
+
+    $scope.addUser = function () {
+      $scope.users.$add({
+        email: $scope.newUserEmail,
+        password: $scope.newUserPassword,
+        name: $scope.newUserName,
+        surname: $scope.newUserSurname
+      });
+    };
+
+
+    s.editUser = function (_user) {
+      s.editFormShow = true;
+      s.editingUser = {
+        id:_user.$id,
+        name:_user.name,
+        surname: _user.surname
+      }
+
+    };
+
+
+    s.cancelEditUser = function () {
+      s.editFormShow = false;
+      s.editingUser = {
+        id:null,
+        name:null,
+        surname: null
+      }
+    };
+    
+    s.saveUser = function () {
+      users.saveUser(s.editingUser).then(function ( ) {
+        s.cancelEditUser();
+      })
+    };
+
+    s.removeUser = function () {
+      users.removeUser(s.editingUser.id).then(function () {
+        s.cancelEditUser();
+      });
+    };
+
+    s.createUser = function () {
+      s.editFormShow = true;
+      users.createBlankUser().then(function (_d) {
+        s.editUser(_d);
+      })
+    };
+
+
+    s.cancelEditUser();
 
   }
 
@@ -631,7 +845,7 @@ angular
 
   "use strict";
 
-  UsersFactory.$inject = ["$q", "$http", "dbc", "$firebaseArray", "$firebaseObject"];
+  UsersFactory.$inject = ["$q", "$http", "$firebaseArray", "$firebaseObject"];
   angular
     .module("fen.users")
     .factory("users", UsersFactory)
@@ -639,22 +853,48 @@ angular
 
 
   // @ngInject
-  function UsersFactory($q, $http, dbc, $firebaseArray, $firebaseObject) {
+  function UsersFactory($q, $http, $firebaseArray, $firebaseObject) {
     var o = {};
     var users = null;
     var ref = firebase.database().ref();
+    var refUsers = ref.child("users");
 
 
-    // o.getUsers = function () {
-    //
-    //   console.log($firebaseObject(ref));
-    //
-    //   return true
-    //
-    // };
+    o.getUsers = function () {
+      return $firebaseArray(refUsers).$loaded(function (_d) {
+        return _d;
+      });
+    };
+
+    o.getUser = function (_id) {
+      return $firebaseObject(refUsers.child(_id)).$loaded();
+    };
+
+    o.saveUser = function (_user) {
+      var user = $firebaseObject(refUsers.child(_user.id));
+      return user.$loaded(function (_dbuser) {
+        _dbuser.name = _user.name;
+        _dbuser.surname = _user.surname;
+        return _dbuser.$save();
+      })
+    };
+
+    o.removeUser = function (_id) {
+      return $firebaseObject(refUsers.child(_id)).$remove();
+    };
+
+    o.createBlankUser = function () {
+      return $firebaseArray(refUsers).$add({
+        name:"",
+        surname:"",
+        registered: firebase.database.ServerValue.TIMESTAMP,
+        last_visit: firebase.database.ServerValue.TIMESTAMP
+      }).then(function (_ref) {
+        return $firebaseObject(_ref).$loaded();
+      })
+    };
 
     return o
-
   }
 
 })();

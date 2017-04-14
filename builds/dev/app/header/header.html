@@ -17,14 +17,14 @@
             <li class="e-nav-item">
               <div class="t">
                 <div class="c">
-                  <a href="home" class="b-logo">
+                  <a ui-sref="home" class="b-logo">
                     <span class="e-logo-text">fenomen</span>
                   </a>
                 </div>
               </div>
             </li>
             <li class="e-nav-item">
-              <a href="home" class="e-nav-link" ng-class="{'active':Page=='home'}">
+              <a ui-sref="home" class="e-nav-link" ui-sref-active="active">
               <span class="t">
                     <span class="c">
                         <span class="e-nav-link-text">Главная</span>
@@ -33,7 +33,7 @@
               </a>
             </li>
             <li class="e-nav-item">
-              <a href="products-list" class="e-nav-link" ng-class="{'active':Page=='products-list'}">
+              <a ui-sref="products-list" class="e-nav-link" ui-sref-active="active">
               <span class="t">
                     <span class="c">
                         <span class="e-nav-link-text">Товары</span>
@@ -87,7 +87,7 @@
               </div>
             </li>
             <li class="e-nav-item">
-              <a href="#/users" class="e-nav-link" ng-class="{'active':Page=='users'}">
+              <a ui-sref="users" class="e-nav-link" ui-sref-active="active">
               <span class="t">
                     <span class="c">
                         <span class="e-nav-link-text">Users</span>
@@ -96,7 +96,7 @@
               </a>
             </li>
             <li class="e-nav-item">
-              <a href="contacts" class="e-nav-link" ng-class="{'active':Page=='contacts'}">
+              <a ui-sref="contacts" class="e-nav-link" ui-sref-active="active">
               <span class="t">
                     <span class="c">
                         <span class="e-nav-link-text">Контакты</span>
@@ -105,7 +105,7 @@
               </a>
             </li>
             <li class="e-nav-item">
-              <a href="#" class="e-nav-link">
+              <a  class="e-nav-link">
               <span class="t">
                     <span class="c">
                         <span class="e-nav-link-text"><span class="e-nav-link-icon"><i class="fa fa-shopping-basket"
@@ -114,30 +114,55 @@
               </span>
               </a>
             </li>
-            <li class="e-nav-item" data-button="1">
-              <div class="t">
-                <div class="c">
-                  <div class="b-header-auth">
-                    <div class="e-header-auth m-header-auth-sing-in">
-                      <div class="t">
-                        <div class="c">
-                          <span class="b-icon"><i class="fa fa-sign-in" aria-hidden="true"></i></span>
-                          <span class="e-header-auth-text">Вход / Регистрация</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="e-header-auth m-header-auth-sing-out">
-                      <div class="t">
-                        <div class="c">
-                          <span class="b-icon"><i class="fa fa-sign-out" aria-hidden="true"></i></span>
-                          <span class="e-header-auth-text">Петр Епифанцев</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <li class="e-nav-item">
+              <a href="javascript:;" class="e-nav-link">
+              <span class="t">
+                    <span class="c">
+                        <span class="e-nav-link-text">{{currentUser.fullname}} <a href="javascript:;" ng-click="logout()">Выход</a></span>
+                    </span>
+              </span>
+              </a>
             </li>
+            <li class="e-nav-item">
+              <a ui-sref="singin" class="e-nav-link" ui-sref-active="active">
+              <span class="t">
+                    <span class="c">
+                        <span class="e-nav-link-text">Вход</span>
+                    </span>
+              </span>
+              </a>
+              <a ui-sref="singup" class="e-nav-link" ui-sref-active="active">
+              <span class="t">
+                    <span class="c">
+                        <span class="e-nav-link-text">Регистрация</span>
+                    </span>
+              </span>
+              </a>
+            </li>
+            <!--<li class="e-nav-item" data-button="1">-->
+              <!--<div class="t">-->
+                <!--<div class="c">-->
+                  <!--<div class="b-header-auth">-->
+                    <!--<div class="e-header-auth m-header-auth-sing-in">-->
+                      <!--<div class="t">-->
+                        <!--<div class="c">-->
+                          <!--<span class="b-icon"><i class="fa fa-sign-in" aria-hidden="true"></i></span>-->
+                          <!--<span class="e-header-auth-text">Вход / Регистрация</span>-->
+                        <!--</div>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="e-header-auth m-header-auth-sing-out">-->
+                      <!--<div class="t">-->
+                        <!--<div class="c">-->
+                          <!--<span class="b-icon"><i class="fa fa-sign-out" aria-hidden="true"></i></span>-->
+                          <!--<span class="e-header-auth-text">Петр Епифанцев</span>-->
+                        <!--</div>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</li>-->
           </ul>
         </nav>
       </div>

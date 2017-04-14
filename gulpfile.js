@@ -21,7 +21,8 @@ gulp.task("js", function () {
   gulp.src([
     "bower_components/jquery/dist/jquery.js",
     "bower_components/angular/angular.js",
-    "bower_components/angular-route/angular-route.js",
+    // "bower_components/angular-route/angular-route.js",
+    "bower_components/angular-ui-router/release/angular-ui-router.min.js",
     "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
     "bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js",
     "bower_components/ng-scrollbars/dist/scrollbars.min.js",
@@ -70,7 +71,7 @@ gulp.task("webserver", function () {
     .pipe(webserver({
       livereload: true,
       open: true,
-      port: 8034
+      port: 8039
     }));
 
 });

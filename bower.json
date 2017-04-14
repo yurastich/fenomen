@@ -23,5 +23,8 @@
     "ng-scrollbars": "^0.0.11",
     "angular-mocks": "^1.6.4",
     "swiper": "^3.4.2"
+  },
+  "devDependencies": {
+    "angular-ui-router": "ui-router#^0.4.2"
   }
 }

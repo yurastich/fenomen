@@ -3374,6 +3374,8 @@ section {
     background-color: #fedd02 !important; }
   .mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
     background-color: #fedd02; }
+  .mCSB_scrollTools + .mCSB_draggerContainer {
+    margin: 0; }
 
 .mCSB_inside > .mCSB_container {
   margin: 0; }
