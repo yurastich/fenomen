@@ -14,7 +14,8 @@
       "fen.users",
       "firebase",
       "fen.database",
-      "fen.registration"
+      "fen.registration",
+      "fen.profile"
     ])
     .controller("MainCtrl", MainController)
     .controller("SubCtrl", SubController)
@@ -66,19 +67,25 @@
 
     $rootScope.$on('$stateChangeStart',
       function (event, toState, toParams, fromStat, fromParams) {
-        console.log(fire.isLogin());
-        // console.log(toState.authenticate);
-        if(toState.authenticate && !fire.isLogin()){
-          $state.transitionTo("singin")
-          event.preventDefault();
-        }else if (!toState.authenticate && fire.isLogin()) {
-          $rootScope.isLogin = true;
-          //$state.transitionTo('home');
-          //event.preventDefault();
-        } else if (!toState.authenticate && !fire.isLogin()) {
-          //$state.transitionTo('home');
-          //event.preventDefault();
-        }
+        fire.get$Auth().onAuthStateChanged(function (firebaseUser) {
+          if(!firebaseUser && toState.authenticate){
+            $state.transitionTo('singin');
+          }else{
+            // console.log("можно зайти");
+          }
+        });
+
+        // if(toState.authenticate && !fire.loggedIn()){
+        //   $state.transitionTo("singin")
+        //   event.preventDefault();
+        // }else if (!toState.authenticate && fire.loggedIn()) {
+        //   $rootScope.loggedIn = true;
+        //   //$state.transitionTo('home');
+        //   //event.preventDefault();
+        // } else if (!toState.authenticate && !fire.isLogin()) {
+        //   //$state.transitionTo('home');
+        //   //event.preventDefault();
+        // }
       });
   }
 

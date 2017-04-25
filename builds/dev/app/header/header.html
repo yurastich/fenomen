@@ -118,7 +118,7 @@
               <a href="javascript:;" class="e-nav-link">
               <span class="t">
                     <span class="c">
-                        <span class="e-nav-link-text">{{currentUser.fullname}} <a href="javascript:;" ng-click="logout()">Выход</a></span>
+                        <span class="e-nav-link-text"><a ui-sref="profile{{'uid:currentUser.uid'}}">{{currentUser.fullname}}</a> <a href="javascript:;" ng-click="logout()">Выход</a></span>
                     </span>
               </span>
               </a>

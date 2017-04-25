@@ -14,7 +14,8 @@
       users = null,
       ref = firebase.database().ref(),
       refUser = ref.child("users"),
-      auth = firebase.auth();
+      auth = firebase.auth(),
+      google = new firebase.auth.GoogleAuthProvider();
 
     o.getRef = function () {
       return ref;
@@ -29,13 +30,16 @@
     };
 
     o.isLogin = function () {
-      auth.onAuthStateChanged(function (user) {
-        if (user) {
-          return true
-        } else {
-          return false
-        }
+      return auth.onAuthStateChanged(function (firebaseUser) {
       });
+    };
+
+    o.getUid = function(){
+      return uid;
+    };
+
+    o.logout = function(){
+      auth.signOut();
     };
 
 
